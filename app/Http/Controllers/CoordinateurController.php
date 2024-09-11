@@ -6,10 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Seance;
 use App\Models\Classe;
 
+
 class CoordinateurController extends Controller
 {
     public function showInterface($classId = null)
     {
+        // Vérifier si l'id du coordinateur est stocké dans la session
+        if (!session()->has('coordinator_id')) {
+            return redirect('/coordinator-login')->with('error', 'Vous devez être connecté pour accéder à cette page.');
+        }
         $emploiDuTemps = [];
         $classe = null;
     

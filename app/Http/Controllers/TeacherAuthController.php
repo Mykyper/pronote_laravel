@@ -36,7 +36,9 @@ class TeacherAuthController extends Controller
 
     // Afficher l'interface de l'enseignant avec l'emploi du temps
     public function show()
-    {
+    {      if (!session()->has('teacher_id')) {
+        return redirect('/teacher/login')->with('error', 'Vous devez être connecté pour enregistrer des données.');
+    }
         // Récupérer les informations de l'enseignant depuis la session
         $teacherId = session('teacher_id');
         $teacher = User::find($teacherId);

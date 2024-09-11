@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pronote Ifran</title>
+  <title>Pronote Ifran - Gestion des Présences</title>
   <link rel="stylesheet" href="{{ asset('css/interface.css') }}">
   <style>
     .form-group {
@@ -70,15 +70,14 @@
 <body>
   <div class="app">
     <header class="header">
-      <div class="title">Pronote Ifran</div>
+      <div class="title">Pronote Ifran - Gestion des Présences</div>
     </header>
 
     <div class="layout">
       <aside class="sidebar">
         <ul>
           <li class="menu-item active">
-            <a href="/teacher/interface"><span class="icon">&#128197;</span> Emploi du temps</a>
-            
+            <span class="icon">&#128197;</span> Emploi du temps
           </li>
           <li class="menu-item">
             <span class="icon">&#128202;</span> Graphiques
@@ -90,7 +89,7 @@
       </aside>
 
       <main class="main-content">
-        <h2>Gestion des Présences</h2>
+        <h2>Marquer la Présence</h2>
 
         <!-- Messages de succès ou d'erreur -->
         @if(session('success'))
@@ -108,33 +107,34 @@
           </div>
         @endif
 
-        <!-- Formulaire pour marquer les présences -->
-        <form action="{{ route('presence.store') }}" method="POST">
-          @csrf
-          <input type="hidden" name="session_id" value="{{ $sessionId }}">
+       <!-- Formulaire pour marquer les présences -->
+       <form action="{{ route('presence_cord.store', ['seance_id' => $seance->id]) }}" method="POST">
+  @csrf
+  <input type="hidden" name="seance_id" value="{{ $seance->id }}">
 
-          @foreach($eleves as $eleve)
-            <div class="form-group">
-              <label for="eleve_{{ $eleve->id }}">{{ $eleve->nom }}</label>
-              <div>
-                <label class="radio-label">
-                  <input type="radio" name="presences[{{ $eleve->id }}]" value="présent" id="present_{{ $eleve->id }}" required>
-                  Présent
-                </label>
-                <label class="radio-label">
-                  <input type="radio" name="presences[{{ $eleve->id }}]" value="absent" id="absent_{{ $eleve->id }}" required>
-                  Absent
-                </label>
-                <label class="radio-label">
-                  <input type="radio" name="presences[{{ $eleve->id }}]" value="retard" id="retard_{{ $eleve->id }}" required>
-                  Retard
-                </label>
-              </div>
-            </div>
-          @endforeach
+  @foreach($eleves as $eleve)
+    <div class="form-group">
+      <label for="eleve_{{ $eleve->id }}">{{ $eleve->nom }}</label>
+      <div>
+        <label class="radio-label">
+          <input type="radio" name="presences[{{ $eleve->id }}]" value="présent" id="present_{{ $eleve->id }}" required>
+          Présent
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="presences[{{ $eleve->id }}]" value="absent" id="absent_{{ $eleve->id }}" required>
+          Absent
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="presences[{{ $eleve->id }}]" value="retard" id="retard_{{ $eleve->id }}" required>
+          Retard
+        </label>
+      </div>
+    </div>
+  @endforeach
 
-          <button type="submit">Enregistrer</button>
-        </form>
+  <button type="submit">Enregistrer</button>
+</form>
+
       </main>
     </div>
   </div>

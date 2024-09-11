@@ -40,5 +40,12 @@ class ParentController extends Controller
         $parents = ParentModel::all();
         return response()->json($parents);
     }
+    public function logout(Request $request)
+{
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect('/parent-log')->with('success', 'Vous vous êtes déconnecté avec succès.');
+}
 }
 

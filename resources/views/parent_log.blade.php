@@ -15,14 +15,16 @@
     </header>
     <main>
         <div class="log">
-            <form class="login-form" id="parent-login-form">
-                <h1><img src="{{ asset('img/pere-et-fils.png') }}" alt="Login Icon" class="login-icon"> Espace Parents</h1>
-                <label for="email">E-mail :</label>
-                <input type="email" id="email" name="email" required>
-                <label for="password">Mot de passe :</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">Se connecter</button>
-            </form>
+        <form class="login-form" id="parent-login-form" method="POST" action="{{ route('parent.login') }}">
+    @csrf
+    <h1><img src="{{ asset('img/pere-et-fils.png') }}" alt="Login Icon" class="login-icon"> Espace Parents</h1>
+    <label for="email">E-mail :</label>
+    <input type="email" id="email" name="email" required>
+    <label for="password">Mot de passe :</label>
+    <input type="password" id="password" name="password" required>
+    <button type="submit">Se connecter</button>
+</form>
+
         </div>
     </main>
 

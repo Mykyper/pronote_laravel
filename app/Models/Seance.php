@@ -27,6 +27,10 @@ class Seance extends Model
     {
         return $this->belongsTo(Module::class, 'module_id');
     }
+    public function presences()
+    {
+        return $this->hasMany(Presence::class, 'seance_id');
+    }
     protected $table = "seances";
 }
 

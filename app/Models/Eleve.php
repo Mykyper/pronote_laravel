@@ -22,5 +22,9 @@ class Eleve extends Model
     {
         return $this->belongsTo(ParentModel::class);
     }
+    public function presences()
+    {
+        return $this->hasMany(Presence::class, 'eleve_id');
+    }
 }
 

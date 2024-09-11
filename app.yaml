@@ -1,0 +1,6 @@
+runtime: php80
+env: flex
+
+handlers:
+- url: /.*
+  script: auto

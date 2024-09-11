@@ -39,7 +39,10 @@ class StudentAuthController extends Controller
 
     // Afficher l'interface de l'élève avec l'emploi du temps
     public function show()
-    {
+    { 
+        if (!session()->has('student_id')) {
+            return redirect('/student-login')->with('error', 'Vous devez être connecté pour accéder à cette page.');
+        }
         // Récupérer les informations de l'élève depuis la session
         $studentName = session('student_name', 'Invité');
         $classId = session('classe_id');

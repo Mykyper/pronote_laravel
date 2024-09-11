@@ -12,6 +12,9 @@ class SeanceController extends Controller
 {
     public function create()
     {
+        if (!session()->has('coordinator_id')) {
+            return redirect('/coordinator-login')->with('error', 'Vous devez être connecté pour enregistrer les présences.');
+        }
         $classes = Classe::all();
         $modules = Module::all();
         $enseignants = User::where('role', 'enseignant')->get();
@@ -20,7 +23,9 @@ class SeanceController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {if (!session()->has('coordinator_id')) {
+        return redirect('/coordinator-login')->with('error', 'Vous devez être connecté pour enregistrer les présences.');
+    }
         $request->validate([
             'class_id' => 'required|exists:classes,id',
             'schedule' => 'required|array',

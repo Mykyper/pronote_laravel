@@ -12,7 +12,7 @@
     <div class="app">
         <header class="header">
             <div class="title">Pronote Ifran</div>
-            <div class="role">Professeur</div>
+         
         </header>
 
         <div class="layout">

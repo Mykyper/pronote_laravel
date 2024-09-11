@@ -10,10 +10,15 @@
 
 <body>
   <div class="app">
-    <header class="header">
-      <div class="title">Pronote Ifran</div>
-      <div class="role">Coordinateur</div>
-    </header>
+  <header class="header">
+    <div class="title">Pronote Ifran</div>
+    <div class="role">Coordinateur</div>
+    <form method="POST" action="{{ route('logout') }}" class="logout-form">
+        @csrf
+        <button type="submit" class="logout-button">Déconnexion</button>
+    </form>
+</header>
+
 
     <div class="layout">
       <aside class="sidebar">
@@ -22,13 +27,12 @@
             <span class="icon">&#128197;</span> Emploi du temps
           </li>
           <li class="menu-item">
-            <span class="icon">&#128202;</span> Graphiques
+            <a href="/graphiques">
+              <span class="icon">&#128202;</span> Graphiques
+            </a>
           </li>
           <li class="menu-item">
-            <span class="icon">&#128100;</span> Absences
-          </li>
-          <li class="menu-item">
-           <a href="/emplois-du-temps/create">Créer emploi du temps</a> 
+            <a href="/emplois-du-temps/create">Créer emploi du temps</a> 
           </li>
           <li class="menu-item">
             <a href="/modules/create">Créer Module</a> 
@@ -68,54 +72,69 @@
         </div>
 
         @if($classe)
-            @if(isset($emploiDuTemps) && !empty($emploiDuTemps))
-                <div class="timetable">
-                    <h2>Emploi du temps pour la classe {{ $classe->niveau }} - {{ $classe->specialité }}</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                @foreach (array_keys($emploiDuTemps) as $date)
-                                    <th>{{ $date }}</th>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>MATIN 9H00 - 12H00</td>
-                                @foreach ($emploiDuTemps as $date => $seances)
-                                    <td>
-                                        @foreach ($seances['matin'] as $seance)
-                                           {{ $seance->enseignant->nom }} <br>
+    @if(isset($emploiDuTemps) && !empty($emploiDuTemps))
+        <div class="timetable">
+            <h2>Emploi du temps pour la classe {{ $classe->niveau }} - {{ $classe->specialité }}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        @foreach (array_keys($emploiDuTemps) as $date)
+                            <th>{{ $date }}</th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Matin -->
+                    <tr>
+                        <td>MATIN 9H00 - 12H00</td>
+                        @foreach ($emploiDuTemps as $date => $seances)
+                            <td>
+                                @foreach ($seances['matin'] as $seance)
+                                    {{ $seance->enseignant->nom }} <br>
+                                    @if (in_array($seance->module->nom, ['Workshop', 'E-learning']))
+                                        <a href="{{ route('presence_cord.details', ['seance_id' => $seance->id]) }}">
                                             {{ $seance->module->nom }}
-                                        @endforeach
-                                    </td>
-                                @endforeach
-                            </tr>
-                            <tr>
-                                <td>APRES-MIDI 14H00 - 17H00</td>
-                                @foreach ($emploiDuTemps as $date => $seances)
-                                    <td>
-                                        @foreach ($seances['soir'] as $seance)
-                                        {{ $seance->enseignant->nom }} <br>
+                                        </a>
+                                    @else
                                         {{ $seance->module->nom }}
-                                        @endforeach
-                                    </td>
+                                    @endif
                                 @endforeach
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            @else
-                <div class="no-schedule">
-                    <p>L'emploi du temps pour la classe {{ $classe->niveau }} - {{ $classe->specialité }} n'est pas encore créé.</p>
-                </div>
-            @endif
-        @else
-            <div class="no-class-selected">
-                <p>Aucune classe sélectionnée. Veuillez sélectionner une classe pour voir l'emploi du temps.</p>
-            </div>
-        @endif
+                            </td>
+                        @endforeach
+                    </tr>
+                    
+                    <!-- Après-midi -->
+                    <tr>
+                        <td>APRES-MIDI 14H00 - 17H00</td>
+                        @foreach ($emploiDuTemps as $date => $seances)
+                            <td>
+                                @foreach ($seances['soir'] as $seance)
+                                    {{ $seance->enseignant->nom }} <br>
+                                    @if (in_array($seance->module->nom, ['Workshop', 'E-learning']))
+                                        <a href="{{ route('presence_cord.details', ['seance_id' => $seance->id]) }}">
+                                            {{ $seance->module->nom }}
+                                        </a>
+                                    @else
+                                        {{ $seance->module->nom }}
+                                    @endif
+                                @endforeach
+                            </td>
+                        @endforeach
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    @else
+        <div class="no-schedule">
+            <p>L'emploi du temps pour la classe {{ $classe->niveau }} - {{ $classe->specialité }} n'est pas encore créé.</p>
+        </div>
+    @endif
+@else
+    <div class="no-class-selected">
+        <p>Aucune classe sélectionnée. Veuillez sélectionner une classe pour voir l'emploi du temps.</p>
+    </div>
+@endif
 
         <button class="modify-button">Modifier</button>
       </main>
